@@ -1,0 +1,6 @@
+@EF_DatabaseInheritance_HostAddress = http://localhost:5250
+
+GET {{EF_DatabaseInheritance_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
