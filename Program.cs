@@ -1,3 +1,5 @@
+using EF_DatabaseInheritance.Data;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+var connectionString = builder.Configuration.GetConnectionString("EF_FluentAPIInheritanceConfigurationConnection");
+
+builder.Services.AddDbContext<EF_DatabaseInheritanceDbContext>(options =>
+    options.UseSqlServer(connectionString));    
 
 var app = builder.Build();
 

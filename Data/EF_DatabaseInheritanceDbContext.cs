@@ -36,13 +36,14 @@ namespace EF_DatabaseInheritance.Data
 
             modelBuilder.Entity<Payment>(entity =>
             {
+
                 entity.ToTable("Payments");
 
                 // Configure discriminator column
                 entity.HasDiscriminator<string>("PaymentType")
-                    .HasValue<CardPayment>("Card")
-                    .HasValue<UPIPayment>("UPI")
-                    .HasValue<WalletPayment>("Wallet");
+                      .HasValue<CardPayment>("Card")
+                      .HasValue<UPIPayment>("UPI")
+                      .HasValue<WalletPayment>("Wallet");
 
                 // Property configurations
                 entity.Property(p => p.Amount)
@@ -65,7 +66,7 @@ namespace EF_DatabaseInheritance.Data
                 entity.Property(p => p.TransactionId)
                      .HasMaxLength(100);
 
-                entity.Property(p => p.Remarks)
+               CLSCompliantAttribute entity.Property(p => p.Remarks)
                     .HasMaxLength(250);
             });
 
@@ -186,6 +187,62 @@ namespace EF_DatabaseInheritance.Data
 
                 entity.Property(n => n.SentBy)
                       .HasMaxLength(100);
+            });
+
+            // Email Notification
+            modelBuilder.Entity<EmailNotification>(entity =>
+            {
+                entity.ToTable("EmailNotifications");
+
+                entity.Property(e => e.RecipientEmail)
+                      .IsRequired()
+                      .HasMaxLength(150);
+
+                entity.Property(e => e.Subject)
+                      .IsRequired()
+                      .HasMaxLength(200);
+
+                entity.Property(e => e.Cc)
+                      .HasMaxLength(150);
+
+                entity.Property(e => e.Bcc)
+                      .HasMaxLength(150);
+            });
+
+            // SMS Notification
+            modelBuilder.Entity<SmsNotification>(entity =>
+            {
+                entity.ToTable("SmsNotifications");
+
+                entity.Property(s => s.RecipientNumber)
+                      .IsRequired()
+                      .HasMaxLength(15);
+
+                entity.Property(s => s.SenderId)
+                      .IsRequired()
+                      .HasMaxLength(20);
+
+                entity.Property(s => s.Provider)
+                      .IsRequired()
+                      .HasMaxLength(50)
+                      .IsUnicode(false);
+            });
+
+            // Push Notification
+            modelBuilder.Entity<PushNotification>(entity =>
+            {
+                entity.ToTable("PushNotifications");
+
+                entity.Property(p => p.DeviceToken)
+                      .IsRequired()
+                      .HasMaxLength(250);
+
+                entity.Property(p => p.AppPlatform)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(p => p.AppVersion)
+                      .HasMaxLength(20);
             });
 
         }

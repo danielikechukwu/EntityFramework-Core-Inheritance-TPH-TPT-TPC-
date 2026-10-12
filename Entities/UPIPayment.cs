@@ -1,6 +1,6 @@
 ﻿namespace EF_DatabaseInheritance.Entities
 {
-    public class UPIPayment
+    public class UPIPayment : Payment
     {
         public string UpiId { get; set; } = null!;
 

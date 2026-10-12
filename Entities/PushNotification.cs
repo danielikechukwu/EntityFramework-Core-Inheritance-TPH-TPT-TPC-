@@ -1,6 +1,6 @@
 ﻿namespace EF_DatabaseInheritance.Entities
 {
-    public class PushNotification
+    public class PushNotification : Notification
     {
         public string DeviceToken { get; set; } = null!;
 
