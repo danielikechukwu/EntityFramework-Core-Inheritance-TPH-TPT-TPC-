@@ -2,6 +2,7 @@
 using EF_DatabaseInheritance.DTOs;
 using EF_DatabaseInheritance.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,17 +20,35 @@ namespace EF_DatabaseInheritance.Controllers
         }
 
         // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllUsers()
         {
-            return new string[] { "value1", "value2" };
+            var users = await _context.Users.ToListAsync();
+
+            var result = users.Select(user => new
+            {
+                user.Id,
+                user.Name,
+                user.Email,
+                user.Username,
+                UserType = user.GetType().Name
+            });
+
+            return Ok(result);
         }
 
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // ---------------- GET BY TYPE ----------------
+        [HttpGet("GetByType/{type}")]
+        public async Task<IActionResult> GetByType(string type)
         {
-            return "value";
+            IEnumerable<User> list = type.ToLower() switch
+            {
+                "customer" => await _context.Customers.ToListAsync(),
+                "seller" => await _context.Sellers.ToListAsync(),
+                "admin" => await _context.AdminUsers.ToListAsync(),
+                _ => new List<User>()
+            };
+            return Ok(list);
         }
 
         // POST api/<UsersController>
@@ -86,18 +105,6 @@ namespace EF_DatabaseInheritance.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = $"{createUser.UserType} created successfully", userId = user.Id });
-        }
-
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
 
     }

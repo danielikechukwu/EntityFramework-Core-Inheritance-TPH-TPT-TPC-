@@ -66,7 +66,7 @@ namespace EF_DatabaseInheritance.Data
                 entity.Property(p => p.TransactionId)
                      .HasMaxLength(100);
 
-               CLSCompliantAttribute entity.Property(p => p.Remarks)
+               entity.Property(p => p.Remarks)
                     .HasMaxLength(250);
             });
 
